@@ -38,7 +38,7 @@ namespace WorkWithTelephoneCompanySubscribers
                 number = searchWindow.Number;
                 mainViewModel = new MainViewModel(number);
                 dataGrid.ItemsSource = mainViewModel.SearchAbonents;
-
+                
             }
 
         }

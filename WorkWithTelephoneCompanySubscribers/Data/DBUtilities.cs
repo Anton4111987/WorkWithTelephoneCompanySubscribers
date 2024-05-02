@@ -1,8 +1,5 @@
 ﻿using Dapper;
-using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
-using System.Data;
+using System.Data.SQLite;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,27 +9,28 @@ namespace WorkWithTelephoneCompanySubscribers.Data
 {
     public static class DBUtilities
     {
+        private static SQLiteConnection _connection;
         public static void FileExists()
         {
-            // File.Create("../../../TelephoneCompany.db");
-            if (!File.Exists("../../../TelephoneCompany.db"))
-            {
-                File.Create("../../../TelephoneCompany.db");
+            if (!File.Exists("TelephoneCompany.db"))
+            {             
                 CreateTables();
             }
+            
         }
 
         public async static void CreateTables()
         {            
-            string connectionString = "Data Source=../../../TelephoneCompany.db";
-            using (IDbConnection connection = new SqliteConnection(connectionString))
+            string connectionString = @"Data Source=TelephoneCompany.db;Version=3;";
+            using ( var _connection =new SQLiteConnection(connectionString))
+                //using (var conn=new SQLiteConnection(connectionString))
             {
-                connection.Open();
+                _connection.Open();
                 var createTableStreets = @"CREATE TABLE IF NOT EXISTS Streets (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL
                 );";
-                 await connection.ExecuteAsync(createTableStreets);
+                 await _connection.ExecuteAsync(createTableStreets);
                 var createTableAddresses = @"CREATE TABLE IF NOT EXISTS Addresses (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 houseNumber TEXT NOT NULL,
@@ -40,7 +38,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 CONSTRAINT addresses_streets_fk 
                 FOREIGN KEY (Street_Id) REFERENCES Streets(id) ON DELETE SET NULL
                 );";
-                await connection.ExecuteAsync(createTableAddresses);
+                await _connection.ExecuteAsync(createTableAddresses);
                 var createTableAbonents = @"CREATE TABLE IF NOT EXISTS Abonents (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 fio TEXT NOT NULL,
@@ -48,7 +46,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 CONSTRAINT abonents_addresses_fk 
                 FOREIGN KEY (Address_Id) REFERENCES Addresses(id) ON DELETE SET NULL
                 );";
-                await connection.ExecuteAsync(createTableAbonents);
+                await _connection.ExecuteAsync(createTableAbonents);
                 var createTablePhoneNumbers = @"CREATE TABLE IF NOT EXISTS PhoneNumbers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 number TEXT NOT NULL,
@@ -56,7 +54,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 CONSTRAINT phoneNumbers_abonents_fk 
                 FOREIGN KEY (Abonent_Id) REFERENCES Abonents(id) ON DELETE SET NULL
                 );";
-                await connection.ExecuteAsync(createTablePhoneNumbers);
+                await _connection.ExecuteAsync(createTablePhoneNumbers);
 
                 var insertStreets = @"
                 INSERT INTO Streets (name)
@@ -81,7 +79,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 ('ул. Пушкина'),
                 ('ул. Центральная'),
                 ('ул. Пушкина');";
-                await connection.ExecuteAsync(insertStreets);
+                await _connection.ExecuteAsync(insertStreets);
                 var insertAddresses = @"
                 INSERT INTO Addresses (houseNumber, street_Id)
                 VALUES 
@@ -105,7 +103,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 ('14', (SELECT id FROM Streets WHERE Name='ул. Пушкина' Limit 1)),
                 ('61', (SELECT id FROM Streets WHERE Name='ул. Центральная' Limit 1)),
                 ('36', (SELECT id FROM Streets WHERE Name='ул. Пушкина' Limit 1));";                
-                await connection.ExecuteAsync(insertAddresses);
+                await _connection.ExecuteAsync(insertAddresses);
                 var insertAbonents = @"
                 INSERT INTO Abonents (fio, address_Id)
                 VALUES 
@@ -129,7 +127,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 ('Киселева Мария Сергеевна', (SELECT id FROM Addresses WHERE houseNumber=14 Limit 1)),
                 ('Александрова Елена Петровна', (SELECT id FROM Addresses WHERE houseNumber=61 Limit 1)),
                 ('Гаврилов Сергей Александрович', (SELECT id FROM Addresses WHERE houseNumber=36 Limit 1));";
-                await connection.ExecuteAsync(insertAbonents);
+                await _connection.ExecuteAsync(insertAbonents);
                 var insertPhoneNumber = @"
                 INSERT INTO PhoneNumbers (number, abonent_Id)
                 VALUES 
@@ -149,14 +147,19 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 ('+7-456-789-01-23', (SELECT id FROM Abonents WHERE fio='Федорова Татьяна Сергеевна' Limit 1)),
                 ('+7-567-890-12-34', (SELECT id FROM Abonents WHERE fio='Беляева Анна Владимировна' Limit 1)),
                 ('+7-678-901-23-45', (SELECT id FROM Abonents WHERE fio='Данилов Александр Иванович' Limit 1)),
-                ('+7-789-012-34-56', (SELECT id FROM Abonents WHERE fio='Григорьев Игорь Андреевич Limit 1)),
+                ('+7-789-012-34-56', (SELECT id FROM Abonents WHERE fio='Григорьев Игорь Андреевич' Limit 1)),
                 ('+7-901-234-56-78', (SELECT id FROM Abonents WHERE fio='Киселева Мария Сергеевна' Limit 1)),
                 ('+7-123-456-78-90', (SELECT id FROM Abonents WHERE fio='Александрова Елена Петровна' Limit 1)),
                 ('+7-987-654-32-10', (SELECT id FROM Abonents WHERE fio='Гаврилов Сергей Александрович' Limit 1));";
-                await connection.ExecuteAsync(insertPhoneNumber);
+                await _connection.ExecuteAsync(insertPhoneNumber);
 
             }
 
+        }
+
+        private static IDisposable SQLiteConnection(string connectionString)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -14,15 +14,13 @@
             <RowDefinition Height="8*"/>
             <RowDefinition Height="2*"/>
         </Grid.RowDefinitions>
-        <DataGrid x:Name="dataGrid" RowHeight="8">
-            <DataGrid ItemsSource="{Binding SearchAbonents}" AutoGenerateColumns="True"/>
-            <!--<DataGrid.Columns>
-                <DataGridTextColumn Width="auto" Header="ФИО абонента"  Binding="{Binding FIO}" />
-                <DataGridTextColumn Width="auto" Header="Улица" Binding="{Binding Street}" />
-                <DataGridTextColumn Width="auto" Header="Номер дома" Binding="{Binding HouseNumber}" />
-                <DataGridTextColumn Width="auto" Header="Номер телефона" Binding="{Binding PhoneNumber}" />
-            </DataGrid.Columns>-->
-            
+        <DataGrid ItemsSource="{Binding SearchAbonents}" x:Name="dataGrid" RowHeight="8">
+            <DataGrid.Columns>
+                <DataGridTextColumn Width="auto" Header="ФИО абонента"  Binding="{Binding FIO}"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Улица" Binding="{Binding Street}"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Номер дома" Binding="{Binding HouseNumber}"></DataGridTextColumn>
+                <DataGridTextColumn Width="auto" Header="Номер телефона" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
+            </DataGrid.Columns>            
         </DataGrid>
         <StackPanel Grid.Row="2">
             <Grid>

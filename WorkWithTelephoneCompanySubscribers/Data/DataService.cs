@@ -56,7 +56,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 return await connection.QueryAsync<SearchAbonent>(
                     @"Select Ab.fio as 'ФИО абонента', Str.Name as Улица, Adr.HouseNumber as 'Номер дома', PN.number as 'Номер телефона' 
                     From Streets as Str, Addresses as Adr, Abonents as Ab, PhoneNumbers as PN
-                    Where Str.id=Adr.street_Id and Adr.id=Ab.address_Id and Ab.id=PN.abonent_Id and PN.number='${number}'");
+                    Where Str.id=Adr.street_Id and Adr.id=Ab.address_Id and Ab.id=PN.abonent_Id and PN.number="+number);
             }
         }
     }

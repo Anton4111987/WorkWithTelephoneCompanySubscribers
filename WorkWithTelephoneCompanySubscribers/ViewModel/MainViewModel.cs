@@ -76,11 +76,6 @@ namespace WorkWithTelephoneCompanySubscribers.ViewModel
             PhoneNumbers = new ObservableCollection<PhoneNumber>(await DataService.LoadPhoneNumbers());
         }
 
-        /*private static ObservableCollection<SearchAbonent> GetSearchAbonents()
-        {
-            return SearchAbonents;
-        }*/
-
         public async void LoadSearchAbonents(string number)
         {
             SearchAbonents = new ObservableCollection<SearchAbonent>(await DataService.LoadSearchAbonents(number));
