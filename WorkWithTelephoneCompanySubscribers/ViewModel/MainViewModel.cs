@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using WorkWithTelephoneCompanySubscribers.Data;
 using WorkWithTelephoneCompanySubscribers.Models;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace WorkWithTelephoneCompanySubscribers.ViewModel
 {
@@ -19,6 +13,8 @@ namespace WorkWithTelephoneCompanySubscribers.ViewModel
         private ObservableCollection<Abonent>? abonents;
         private ObservableCollection<PhoneNumber>? phoneNumbers;
         private ObservableCollection<SearchAbonent>? searchAbonents;
+        private ObservableCollection<SearchAbonent>? allAbonents;
+        private ObservableCollection<ShowByStreet>? showByStreets;
 
         public ObservableCollection<Street> Streets
         {
@@ -46,13 +42,24 @@ namespace WorkWithTelephoneCompanySubscribers.ViewModel
             get { return searchAbonents; }
             set { searchAbonents = value; OnPropertyChanged(); }
         }
-        public MainViewModel(string number)
+        public ObservableCollection<SearchAbonent> AllAbonents
+        {
+            get { return allAbonents; }
+            set { allAbonents = value; OnPropertyChanged(); }
+        }
+        public ObservableCollection<ShowByStreet> ShowByStreets
+        {
+            get { return showByStreets; }
+            set { showByStreets = value; OnPropertyChanged(); }
+        }
+        public MainViewModel()
         {
             LoadStreets();
             LoadAddresses();
             LoadAbonents();
             LoadPhoneNumbers();
-            LoadSearchAbonents(number);
+            LoadAllAbonents();
+            LoadShowByStreets();
         }
         
 
@@ -80,7 +87,14 @@ namespace WorkWithTelephoneCompanySubscribers.ViewModel
         {
             SearchAbonents = new ObservableCollection<SearchAbonent>(await DataService.LoadSearchAbonents(number));
         }
-
+        public async void LoadAllAbonents()
+        {
+            AllAbonents = new ObservableCollection<SearchAbonent>(await DataService.LoadAllAbonents());
+        }
+        public async void LoadShowByStreets()
+        {
+            ShowByStreets = new ObservableCollection<ShowByStreet>(await DataService.LoadShowByStreets());
+        }
 
         public event PropertyChangedEventHandler? PropertyChanged;
 

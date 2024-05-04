@@ -1,26 +1,42 @@
-﻿<Window x:Class="WorkWithTelephoneCompanySubscribers.MainWindow"
+﻿<Window
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkWithTelephoneCompanySubscribers"
+        xmlns:Models="clr-namespace:WorkWithTelephoneCompanySubscribers.Models" x:Class="WorkWithTelephoneCompanySubscribers.MainWindow"
         mc:Ignorable="d"
-        Title="Приложение для работы с абонентами телефонной компании." Height="450" Width="800">
+        Title="Приложение для работы с абонентами телефонной компании." Height="450" Width="1000">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="8*"/>
-            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
-        <DataGrid ItemsSource="{Binding SearchAbonents}" x:Name="dataGrid" RowHeight="8">
+        <Grid.DataContext>
+            <Models:Abonent/>
+        </Grid.DataContext>
+        <DataGrid ItemsSource="{Binding SearchAbonents}" x:Name="dataGrid" RowHeight="25" AutoGenerateColumns="False" Margin="0,1,0,48" Grid.RowSpan="2" CanUserAddRows="False">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Style.Setters>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style.Setters>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
             <DataGrid.Columns>
-                <DataGridTextColumn Width="auto" Header="ФИО абонента"  Binding="{Binding FIO}"></DataGridTextColumn>
-                <DataGridTextColumn Width="auto" Header="Улица" Binding="{Binding Street}"></DataGridTextColumn>
-                <DataGridTextColumn Width="auto" Header="Номер дома" Binding="{Binding HouseNumber}"></DataGridTextColumn>
-                <DataGridTextColumn Width="auto" Header="Номер телефона" Binding="{Binding PhoneNumber}"></DataGridTextColumn>
-            </DataGrid.Columns>            
+                <DataGridTextColumn Width="*" IsReadOnly="True" Header="ФИО абонента"   Binding="{Binding FIO}" FontSize="14" ></DataGridTextColumn>
+                <DataGridTextColumn Width="*" IsReadOnly="True" Header="Улица" Binding="{Binding Street}" FontSize="14"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" IsReadOnly="True" Header="Номер дома" Binding="{Binding HouseNumber}" FontSize="14"></DataGridTextColumn>
+                <DataGridTextColumn Width="*" IsReadOnly="True" Header="Номер телефона" Binding="{Binding PhoneNumber}" FontSize="14"></DataGridTextColumn>
+            </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2">
             <Grid>
@@ -28,14 +44,13 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-               
-                <Button Name="Search" Width="150" Margin="25" Grid.Column="0" Click="Search_Click">Поиск</Button>
-                <Button Name="Unload" Width="150" Margin="25" Grid.Column="1">Выгрузить CSV</Button>
-                <Button Name="Streets" Width="150" Margin="25" Grid.Column="2" Click="Streets_Click">Улицы</Button>
+                <Button x:Name="Search" Width="150" Margin="15" Height="20" Grid.Column="0" Click="Search_Click" Content="Поиск"/>
+                <Button x:Name="Unload" Width="150" Margin="15" Height="20" Grid.Column="1" Click="Unload_Click" Content="Выгрузить CSV"/>
+                <Button x:Name="Streets" Width="150" Margin="15" Height="20" Grid.Column="2" Click="Streets_Click" Content="Улицы"/>
+                <Button x:Name="All" Width="150" Margin="15" Height="20" Grid.Column="3" Click="ShowAllAbonents_Click" Content="Показать всех"/>
             </Grid>
-            
-
         </StackPanel>
     </Grid>
 </Window>

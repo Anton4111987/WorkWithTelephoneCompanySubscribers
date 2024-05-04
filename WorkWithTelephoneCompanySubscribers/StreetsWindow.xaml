@@ -5,20 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WorkWithTelephoneCompanySubscribers"
         mc:Ignorable="d"
-        Title="Окно для ввода улицы" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen">
+        Title="Окно улиц" SizeToContent="WidthAndHeight" WindowStartupLocation="CenterScreen" Height="220" Width="400">
     <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="20" />
-            <RowDefinition Height="20" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="5*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
+        <DataGrid ItemsSource="{Binding ShowByStreet}" x:Name="dataGridStreets" RowHeight="20" AutoGenerateColumns="False" Margin="0,1,0,10">
+            <DataGrid.Resources>
+                <Style TargetType="DataGridCell">
+                    <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                </Style>
+            </DataGrid.Resources>
+            <DataGrid.ColumnHeaderStyle>
+                <Style TargetType="DataGridColumnHeader">
+                    <Style.Setters>
+                        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                    </Style.Setters>
+                </Style>
+            </DataGrid.ColumnHeaderStyle>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Название Улицы" IsReadOnly="True"   Binding="{Binding Name}" FontSize="14" ></DataGridTextColumn>
+                <DataGridTextColumn  Header="Количество абонентов" IsReadOnly="True"  Binding="{Binding Count}" FontSize="14"></DataGridTextColumn>
 
-        <TextBlock>Введите улицу:</TextBlock>
-        <TextBox Name="streetBox" Grid.Row="1" MinWidth="250">Улица</TextBox>
+            </DataGrid.Columns>
+        </DataGrid>
 
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" Margin="0,15,0,0">
+
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Right" Margin="0,0,0,0">
             <Button IsDefault="True" Click="Accept_Click" MinWidth="60" Margin="0,0,10,0">OK</Button>
-            <Button IsCancel="True" MinWidth="60">Отмена</Button>
         </WrapPanel>
     </Grid>
 </Window>

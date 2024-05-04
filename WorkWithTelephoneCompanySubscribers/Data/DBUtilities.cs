@@ -1,29 +1,23 @@
 ﻿using Dapper;
 using System.Data.SQLite;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace WorkWithTelephoneCompanySubscribers.Data
 {
     public static class DBUtilities
     {
-        private static SQLiteConnection _connection;
         public static void FileExists()
         {
             if (!File.Exists("TelephoneCompany.db"))
             {             
                 CreateTables();
             }
-            
         }
 
         public async static void CreateTables()
         {            
             string connectionString = @"Data Source=TelephoneCompany.db;Version=3;";
             using ( var _connection =new SQLiteConnection(connectionString))
-                //using (var conn=new SQLiteConnection(connectionString))
             {
                 _connection.Open();
                 var createTableStreets = @"CREATE TABLE IF NOT EXISTS Streets (
@@ -55,54 +49,53 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 FOREIGN KEY (Abonent_Id) REFERENCES Abonents(id) ON DELETE SET NULL
                 );";
                 await _connection.ExecuteAsync(createTablePhoneNumbers);
-
                 var insertStreets = @"
                 INSERT INTO Streets (name)
                 VALUES 
-                ('ул. Солнечная'),
-                ('ул. Южная'),
-                ('ул. Ленина'),
-                ('ул. Центральная'),
-                ('ул. Пушкина'),
-                ('ул. Набережная'),
-                ('ул. Зеленая'),
-                ('ул. Озерная'),
-                ('ул. Мира'),
-                ('ул. Садовая'),
-                ('ул. Ленина'),
-                ('ул. Солнечная'),
-                ('ул. Садовая'),
-                ('ул. Солнечная'),
-                ('ул. Зеленая'),
-                ('ул. Мира'),
-                ('ул. Набережная'),
-                ('ул. Пушкина'),
-                ('ул. Центральная'),
-                ('ул. Пушкина');";
+                ('Солнечная'),
+                ('Южная'),
+                ('Ленина'),
+                ('Центральная'),
+                ('Пушкина'),
+                ('Набережная'),
+                ('Зеленая'),
+                ('Озерная'),
+                ('Мира'),
+                ('Садовая'),
+                ('Ленина'),
+                ('Солнечная'),
+                ('Садовая'),
+                ('Солнечная'),
+                ('Зеленая'),
+                ('Мира'),
+                ('Набережная'),
+                ('Пушкина'),
+                ('Центральная'),
+                ('Пушкина');";
                 await _connection.ExecuteAsync(insertStreets);
                 var insertAddresses = @"
                 INSERT INTO Addresses (houseNumber, street_Id)
                 VALUES 
-                ('43', (SELECT id FROM Streets WHERE Name='ул. Солнечная' Limit 1)),
-                ('12', (SELECT id FROM Streets WHERE Name='ул. Южная' Limit 1)),
-                ('78', (SELECT id FROM Streets WHERE Name='ул. Ленина' Limit 1)),
-                ('56', (SELECT id FROM Streets WHERE Name='ул. Центральная' Limit 1)),
-                ('32', (SELECT id FROM Streets WHERE Name='ул. Пушкина' Limit 1)),
-                ('87', (SELECT id FROM Streets WHERE Name='ул. Набережная' Limit 1)),
-                ('21', (SELECT id FROM Streets WHERE Name='ул. Зеленая' Limit 1)),
-                ('64', (SELECT id FROM Streets WHERE Name='ул. Озерная' Limit 1)),
-                ('5',  (SELECT id FROM Streets WHERE Name='ул. Мира' Limit 1)),
-                ('94', (SELECT id FROM Streets WHERE Name='ул. Садовая' Limit 1)),
-                ('76', (SELECT id FROM Streets WHERE Name='ул. Ленина' Limit 1)),
-                ('18', (SELECT id FROM Streets WHERE Name='ул. Солнечная' Limit 1)),
-                ('39', (SELECT id FROM Streets WHERE Name='ул. Садовая' Limit 1)),
-                ('83', (SELECT id FROM Streets WHERE Name='ул. Солнечная' Limit 1)),
-                ('25', (SELECT id FROM Streets WHERE Name='ул. Зеленая' Limit 1)),
-                ('48', (SELECT id FROM Streets WHERE Name='ул. Мира' Limit 1)),
-                ('72', (SELECT id FROM Streets WHERE Name='ул. Набережная' Limit 1)),
-                ('14', (SELECT id FROM Streets WHERE Name='ул. Пушкина' Limit 1)),
-                ('61', (SELECT id FROM Streets WHERE Name='ул. Центральная' Limit 1)),
-                ('36', (SELECT id FROM Streets WHERE Name='ул. Пушкина' Limit 1));";                
+                ('43', (SELECT id FROM Streets WHERE Name='Солнечная' Limit 1)),
+                ('12', (SELECT id FROM Streets WHERE Name='Южная' Limit 1)),
+                ('78', (SELECT id FROM Streets WHERE Name='Ленина' Limit 1)),
+                ('56', (SELECT id FROM Streets WHERE Name='Центральная' Limit 1)),
+                ('32', (SELECT id FROM Streets WHERE Name='Пушкина' Limit 1)),
+                ('87', (SELECT id FROM Streets WHERE Name='Набережная' Limit 1)),
+                ('21', (SELECT id FROM Streets WHERE Name='Зеленая' Limit 1)),
+                ('64', (SELECT id FROM Streets WHERE Name='Озерная' Limit 1)),
+                ('5',  (SELECT id FROM Streets WHERE Name='Мира' Limit 1)),
+                ('94', (SELECT id FROM Streets WHERE Name='Садовая' Limit 1)),
+                ('76', (SELECT id FROM Streets WHERE Name='Ленина' Limit 1)),
+                ('18', (SELECT id FROM Streets WHERE Name='Солнечная' Limit 1)),
+                ('39', (SELECT id FROM Streets WHERE Name='Садовая' Limit 1)),
+                ('83', (SELECT id FROM Streets WHERE Name='Солнечная' Limit 1)),
+                ('25', (SELECT id FROM Streets WHERE Name='Зеленая' Limit 1)),
+                ('48', (SELECT id FROM Streets WHERE Name='Мира' Limit 1)),
+                ('72', (SELECT id FROM Streets WHERE Name='Набережная' Limit 1)),
+                ('14', (SELECT id FROM Streets WHERE Name='Пушкина' Limit 1)),
+                ('61', (SELECT id FROM Streets WHERE Name='Центральная' Limit 1)),
+                ('36', (SELECT id FROM Streets WHERE Name='Пушкина' Limit 1));";                
                 await _connection.ExecuteAsync(insertAddresses);
                 var insertAbonents = @"
                 INSERT INTO Abonents (fio, address_Id)
@@ -152,9 +145,7 @@ namespace WorkWithTelephoneCompanySubscribers.Data
                 ('+7-123-456-78-90', (SELECT id FROM Abonents WHERE fio='Александрова Елена Петровна' Limit 1)),
                 ('+7-987-654-32-10', (SELECT id FROM Abonents WHERE fio='Гаврилов Сергей Александрович' Limit 1));";
                 await _connection.ExecuteAsync(insertPhoneNumber);
-
             }
-
         }
 
         private static IDisposable SQLiteConnection(string connectionString)

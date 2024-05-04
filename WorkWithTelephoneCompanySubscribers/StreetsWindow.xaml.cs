@@ -1,36 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using WorkWithTelephoneCompanySubscribers.ViewModel;
 
 namespace WorkWithTelephoneCompanySubscribers
 {
-    /// <summary>
-    /// Логика взаимодействия для StreetsWindow.xaml
-    /// </summary>
     public partial class StreetsWindow : Window
     {
-        public StreetsWindow()
+        public StreetsWindow(MainViewModel mainViewModel)
         {
             InitializeComponent();
+            dataGridStreets.ItemsSource=mainViewModel.ShowByStreets;
         }
 
         private void Accept_Click(object sender, RoutedEventArgs e)
         {
             this.DialogResult = true;
-        }
-        public string Street
-        {
-            get { return streetBox.Text; }
         }
     }
 }

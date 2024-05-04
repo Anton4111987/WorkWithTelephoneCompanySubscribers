@@ -1,11 +1,6 @@
 ﻿using Dapper;
 using Microsoft.Data.Sqlite;
-using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WorkWithTelephoneCompanySubscribers.Models;
 
 namespace WorkWithTelephoneCompanySubscribers.Data
@@ -54,9 +49,35 @@ namespace WorkWithTelephoneCompanySubscribers.Data
             {
                 connection.Open();
                 return await connection.QueryAsync<SearchAbonent>(
-                    @"Select Ab.fio as 'ФИО абонента', Str.Name as Улица, Adr.HouseNumber as 'Номер дома', PN.number as 'Номер телефона' 
+                    $@"Select Ab.fio as {nameof(SearchAbonent.FIO)}, Str.Name as {nameof(SearchAbonent.Street)}, Adr.HouseNumber as {nameof(SearchAbonent.HouseNumber)}, PN.number as {nameof(SearchAbonent.PhoneNumber)} 
                     From Streets as Str, Addresses as Adr, Abonents as Ab, PhoneNumbers as PN
-                    Where Str.id=Adr.street_Id and Adr.id=Ab.address_Id and Ab.id=PN.abonent_Id and PN.number="+number);
+                    Where Str.id=Adr.street_Id and Adr.id=Ab.address_Id and Ab.id=PN.abonent_Id and PN.number='{number}'
+                    Order by Ab.fio");
+            }
+        }
+        public static async Task<IEnumerable<SearchAbonent>> LoadAllAbonents()
+        {
+            using (IDbConnection connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                return await connection.QueryAsync<SearchAbonent>(
+                    $@"Select Ab.fio as {nameof(SearchAbonent.FIO)}, Str.Name as {nameof(SearchAbonent.Street)}, Adr.HouseNumber as {nameof(SearchAbonent.HouseNumber)}, PN.number as {nameof(SearchAbonent.PhoneNumber)} 
+                    From Streets as Str, Addresses as Adr, Abonents as Ab, PhoneNumbers as PN
+                    Where Str.id=Adr.street_Id and Adr.id=Ab.address_Id and Ab.id=PN.abonent_Id
+                    Order by Ab.fio");
+            }
+        }
+
+        public static async Task<IEnumerable<ShowByStreet>> LoadShowByStreets()
+        {
+            using (IDbConnection connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
+                return await connection.QueryAsync<ShowByStreet>(
+                    $@"Select Name as {nameof(ShowByStreet.Name)}, count(id) as {nameof(ShowByStreet.Count)}
+                    From Streets
+                    group by Name
+                    order by Name");
             }
         }
     }
